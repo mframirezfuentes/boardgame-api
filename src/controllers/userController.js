@@ -15,7 +15,6 @@ exports.createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-
     const newUser = new User({ name, email, password });
     await newUser.save();
 
@@ -34,5 +33,28 @@ exports.createUser = async (req, res) => {
   } catch (error) {
     console.log("Can not to create user");
     res.status(500).send("error to create user");
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    res.status(200).json({ message: "Usuario eliminado con éxito" });
+  } catch (error) {
+    console.log("Error to delete user", error);
+    res.status(500).json({ message: "Error to delete user" });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, password } = req.body;
+    await User.findByIdAndUpdate(id, { name, email, password });
+    res.status(200).json({ message: "Usuario actualizado con éxito" });
+  } catch (error) {
+    console.log("error to update user", error);
+    res.status(500).json({ message: "Error to update user" });
   }
 };
