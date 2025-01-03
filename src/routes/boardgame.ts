@@ -1,4 +1,4 @@
-const express = require("express");
+import express from"express";
 const router = express.Router();
 const boardgameController = require("../controllers/boardgameController");
 
@@ -8,4 +8,4 @@ router.get("/boardgame/:id", boardgameController.getOneBoardgame);
 router.put("/boardgame/:id", boardgameController.updateBoardgame);
 router.delete("/boardgame/:id", boardgameController.deleteBoardgame);
 
-module.exports = router;
+export default router;

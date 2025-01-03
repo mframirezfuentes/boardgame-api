@@ -1,7 +1,8 @@
-const User = require("../models/users");
-const userModel = require("../models/boardgame");
+import { Request, Response } from "express";
+import User from "../models/users";
+import userModel from "../models/boardgame";
 
-exports.getUsers = async (req, res) => {
+const getUsers = async (_req: Request, res: Response) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
@@ -11,32 +12,33 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-exports.createUser = async (req, res) => {
+export const createUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const { name, email, password } = req.body;
 
-    const newUser = new User({ name, email, password });
-    await newUser.save();
-
     try {
+      const newUser = new User({ name, email, password });
+      await newUser.save();
       await userModel.createUser(name, email);
+      return res
+        .status(201)
+        .json({ message: "Usuario creado con éxito", user: newUser });
     } catch (error) {
       console.log("Error al crear usuario en Neo4j:", error);
       return res
         .status(500)
         .json({ message: "Error al crear usuario en Neo4j" });
     }
-
-    res
-      .status(201)
-      .json({ message: "Usuario creado con éxito", user: newUser });
   } catch (error) {
     console.log("Can not to create user");
-    res.status(500).send("error to create user");
+    return res.status(500).send("error to create user");
   }
 };
 
-exports.deleteUser = async (req, res) => {
+const deleteUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     await User.findByIdAndDelete(id);
@@ -47,7 +49,7 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-exports.updateUser = async (req, res) => {
+const updateUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { name, email, password } = req.body;
@@ -58,3 +60,5 @@ exports.updateUser = async (req, res) => {
     res.status(500).json({ message: "Error to update user" });
   }
 };
+
+export default { getUsers, deleteUser, updateUser };

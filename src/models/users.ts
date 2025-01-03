@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const bycript = require("bcrypt");
+import mongoose from "mongoose";
+import bycript from "bcrypt";
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -31,10 +31,10 @@ userSchema.pre("save", async function (next) {
     const salt = await bycript.genSalt(10);
     this.password = await bycript.hash(this.password, salt);
     next();
-  } catch (error) {
+  } catch (error: any) {
     next(error);
   }
 });
 
 const User = mongoose.models.Users || mongoose.model("Users", userSchema);
-module.exports = User;
+export default User;

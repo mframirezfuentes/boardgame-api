@@ -1,6 +1,7 @@
-const boardgame = require("../models/boardgame");
+import { Request, Response } from "express";
+import boardgame from "../models/boardgame";
 
-exports.createBoardgame = async (req, res) => {
+exports.createBoardgame = async (req: Request, res: Response) => {
   try {
     const { title, year, author } = req.body;
     const newBoardgame = await boardgame.createBoardgame(title, year, author);
@@ -11,17 +12,16 @@ exports.createBoardgame = async (req, res) => {
   }
 };
 
-exports.getBoardgame = async (req, res) => {
+exports.getBoardgame = async (_req: Request, res: Response) => {
   try {
     const boardgames = await boardgame.getBoardgame();
-    console.log("boardgames", boardgames);
-    res.status(200).json(boardgames);
+    return res.status(200).json(boardgames);
   } catch (error) {
     console.log("Error to find boardgames");
-    res.status(500).json({ message: "Error to find boardgames" });
+    return res.status(500).json({ message: "Error to find boardgames" });
   }
 };
-exports.getOneBoardgame = async (req, res) => {
+exports.getOneBoardgame = async (req: Request, res: Response) => {
   try {
     const boardgameId = req.params.id;
     const boardgameData = await boardgame.getOneBoardgame(boardgameId);
@@ -32,7 +32,7 @@ exports.getOneBoardgame = async (req, res) => {
   }
 };
 
-exports.updateBoardgame = async (req, res) => {
+exports.updateBoardgame = async (req: Request, res: Response) => {
   try {
     const boardgameId = req.params.id;
     const { name, year, description } = req.body;
@@ -44,7 +44,7 @@ exports.updateBoardgame = async (req, res) => {
   }
 };
 
-exports.deleteBoardgame = async (req, res) => {
+exports.deleteBoardgame = async (req: Request, res: Response) => {
   try {
     const boardgameId = req.params.id;
     await boardgame.deleteBoardgame(boardgameId);
