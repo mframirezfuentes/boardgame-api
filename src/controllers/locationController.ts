@@ -5,7 +5,7 @@ const createLocation = async (req: Request, res: Response) => {
   try {
     const { name, address } = req.body;
     const newLocation = await location.createLocation(name, address);
-    res.status(201).json(newLocation);
+    res.status(201).json(newLocation.properties);
   } catch (error) {
     console.log("Error to create location", error);
     res.status(500).json({ message: "Error to create location" });

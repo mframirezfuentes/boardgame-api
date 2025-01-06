@@ -3,7 +3,7 @@ const {v4: uuidv4} = require("uuid");
 
 const createLocation = async (name:  String, address: String) => {
   const query = `
-        CREATE (l:Location {id:${uuidv4()},name: ${name}, address: ${address}})
+        CREATE (l:Location {id:"${uuidv4()}",name: "${name}", address: "${address}"})
         RETURN l
     `;
   try {
