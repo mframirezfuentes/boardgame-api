@@ -1,12 +1,12 @@
 const { runQuery } = require("../config/neo4j");
 
-const createLocation = async (name, address) => {
+const createLocation = async (name: String, address: String) => {
   const query = `
-        CREATE (l:Location {name: $name, address: $address})
+        CREATE (l:Location {name: ${name}, address: ${address}})
         RETURN l
     `;
   try {
-    const result = await runQuery(query, { name, address });
+    const result = await runQuery(query);
     console.log("Neo4j result:", result);
     return result.records[0].get("l").properties;
   } catch (error) {
@@ -21,19 +21,19 @@ const getLocations = async () => {
         RETURN l
     `;
   const result = await runQuery(query);
-  return result.records.map((record) => record.get("l").properties);
+  return result?.records?.map((record: any) => record.get("l").properties);
 };
 
-const getOneLocation = async (locationId) => {
+const getOneLocation = async (locationId: String) => {
   const query = `
         MATCH (l:Location {id: $locationId})
         RETURN l
     `;
   const result = await runQuery(query, { locationId });
-  return result.records.map((record) => record.get("l").properties);
+  return result?.records?.map((record: any) => record.get("l").properties);
 };
 
-const addLocationToUser = async (userId, locationId) => {
+const addLocationToUser = async (userId: String, locationId: String) => {
   const query = `
       MATCH (u:User {id: $userId})
       MATCH (l:Location {id: $locationId})
@@ -42,7 +42,11 @@ const addLocationToUser = async (userId, locationId) => {
   await runQuery(query, { userId, locationId });
 };
 
-const updateLocation = async (locationId, name, address) => {
+const updateLocation = async (
+  locationId: String,
+  name: String,
+  address: String
+) => {
   const query = `
         MATCH (l:Location {id: $locationId})
         SET l.name = $name, l.address = $address
@@ -52,7 +56,7 @@ const updateLocation = async (locationId, name, address) => {
   return result.records[0].get("l").properties;
 };
 
-const deleteLocation = async (locationId) => {
+const deleteLocation = async (locationId: String) => {
   const query = `
         MATCH (l:Location {id: $locationId})
         DETACH DELETE l
@@ -60,11 +64,11 @@ const deleteLocation = async (locationId) => {
   await runQuery(query, { locationId });
 };
 
-module.exports = {
+export default {
   createLocation,
   getLocations,
   getOneLocation,
   addLocationToUser,
-  deleteLocation,
   updateLocation,
+  deleteLocation,
 };

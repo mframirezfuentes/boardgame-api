@@ -1,6 +1,7 @@
 import express from"express";
+import boardgameController from "../controllers/boardgameController";
 const router = express.Router();
-const boardgameController = require("../controllers/boardgameController");
+
 
 router.post("/boardgame", boardgameController.createBoardgame);
 router.get("/boardgame", boardgameController.getBoardgame);

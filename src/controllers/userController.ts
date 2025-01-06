@@ -15,7 +15,7 @@ const getUsers = async (_req: Request, res: Response) => {
 export const createUser = async (
   req: Request,
   res: Response
-): Promise<Response> => {
+): Promise<void>  => {
   try {
     const { name, email, password } = req.body;
 
@@ -23,18 +23,18 @@ export const createUser = async (
       const newUser = new User({ name, email, password });
       await newUser.save();
       await userModel.createUser(name, email);
-      return res
+       res
         .status(201)
         .json({ message: "Usuario creado con éxito", user: newUser });
     } catch (error) {
       console.log("Error al crear usuario en Neo4j:", error);
-      return res
+       res
         .status(500)
         .json({ message: "Error al crear usuario en Neo4j" });
     }
   } catch (error) {
     console.log("Can not to create user");
-    return res.status(500).send("error to create user");
+     res.status(500).send("error to create user");
   }
 };
 
@@ -61,4 +61,4 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export default { getUsers, deleteUser, updateUser };
+export default { getUsers, deleteUser, updateUser, createUser };

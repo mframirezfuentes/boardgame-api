@@ -1,6 +1,7 @@
-const author = require("../models/author");
+import { Request, Response } from "express";
+import author from "../models/author";
 
-const createAuthor = async (req, res) => {
+const createAuthor = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name } = req.body;
     const newAuthor = await author.createAuthor(name);
@@ -11,10 +12,9 @@ const createAuthor = async (req, res) => {
   }
 };
 
-const getAuthors = async (req, res) => {
+const getAuthors = async (_req: Request, res: Response): Promise<void> => {
   try {
     const authors = await author.getAuthors();
-    console.log("authors", authors);
     res.status(200).json(authors);
   } catch (error) {
     console.log("Error to find authors");
@@ -22,7 +22,7 @@ const getAuthors = async (req, res) => {
   }
 };
 
-const getOneAuthor = async (req, res) => {
+const getOneAuthor = async (req: Request, res: Response): Promise<void> => {
   try {
     const authorId = req.params.id;
     const authorData = await author.getOneAuthor(authorId);
@@ -33,11 +33,10 @@ const getOneAuthor = async (req, res) => {
   }
 };
 
-const updateAuthor = async (req, res) => {
+const updateAuthor = async (req: Request, res: Response): Promise<void> => {
   try {
-    const authorId = req.params.id;
-    const { name } = req.body;
-    await author.updateAuthor(authorId, name);
+    const { id } = req.body;
+    await author.updateAuthor(id);
     res.status(200).json({ message: "Author updated" });
   } catch (error) {
     console.log("Error to update author", error);
@@ -45,7 +44,7 @@ const updateAuthor = async (req, res) => {
   }
 };
 
-const deleteAuthor = async (req, res) => {
+const deleteAuthor = async (req: Request, res: Response): Promise<void> => {
   try {
     const authorId = req.params.id;
     await author.deleteAuthor(authorId);
@@ -56,7 +55,7 @@ const deleteAuthor = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   createAuthor,
   getAuthors,
   getOneAuthor,

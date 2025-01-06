@@ -1,4 +1,5 @@
 import { runQuery } from "../config/neo4j";
+import { v4 as uuidv4 } from "uuid";
 
 const createUser = async (name: String, email: String) => {
   const query = `
@@ -43,7 +44,7 @@ const addGameToUser = async (userId: String, gameId: String) => {
 
 const createBoardgame = async (title: String, year: number, author: String) => {
   const query = `
-    CREATE (b:BoardGame {title: ${title}, year: ${year}})
+    CREATE (b:BoardGame {title: ${title}, year: ${year}, id: "${uuidv4()}"})
     MERGE (a:Author {name: ${author}})
     CREATE (b)-[:CREATED_BY]->(a)
     RETURN b
@@ -63,49 +64,43 @@ const createBoardgame = async (title: String, year: number, author: String) => {
 
 const deleteBoardgame = async (id: String) => {
   const query = `
-    MATCH (b:BoardGame {id: ${id}})
+    MATCH (b:BoardGame {id: "${id}"})
     DETACH DELETE b
   `;
   await runQuery(query);
 };
 
 const getBoardgame = async () => {
-  const query = `
-    MATCH (b:BoardGame)
-    RETURN b
-  `;
-  const result = await runQuery(query);
-  if (result && result.records) {
-    return result.records.map((record: any) => record.get("b").properties);
-  } else {
-    throw new Error("No records found");
+  try {
+    const query = `
+      MATCH (b:BoardGame)
+      RETURN b
+    `;
+    const result = await runQuery(query);
+
+    return result?.records.map((record: any) => record.get("b").properties);
+  } catch (error) {
+    console.error("Error fetching boardgames from Neo4j:", error);
+    throw new Error("Error fetching boardgames");
   }
 };
 
 const getOneBoardgame = async (id: String) => {
   try {
-    const query = `MATCH (b:BoardGame {id: ${id}}) RETURN b`;
+    const query = `MATCH (b:BoardGame {id: "${id}"}) RETURN b`;
     const result = await runQuery(query);
-    if (result && result.records[0]) {
-      return result.records[0].get("b").properties;
-    } else {
-      throw new Error("No records found");
-    }
+
+    return result?.records[0].get("b").properties;
   } catch (error) {
     console.log("Error to find boardgame");
   }
 };
 
-const updateBoardgame = async (
-  id: String,
-  name: String,
-  year: number,
-  description: String
-) => {
+const updateBoardgame = async (id: String, title: String, year: number) => {
   try {
     const query = `
-  MATCH (b:BoardGame {id: ${id}})
-  SET b.name = ${name}, b.year = ${year}, b.description = ${description}
+  MATCH (b:BoardGame {id: "${id}"})
+  SET b.title = "${title}", b.year = ${year}
 `;
     await runQuery(query);
   } catch (error) {
@@ -121,5 +116,5 @@ export default {
   deleteBoardgame,
   getBoardgame,
   getOneBoardgame,
-  updateBoardgame
+  updateBoardgame,
 };

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import boardgame from "../models/boardgame";
 
-exports.createBoardgame = async (req: Request, res: Response) => {
+const createBoardgame = async (req: Request, res: Response) => {
   try {
     const { title, year, author } = req.body;
     const newBoardgame = await boardgame.createBoardgame(title, year, author);
@@ -12,16 +12,16 @@ exports.createBoardgame = async (req: Request, res: Response) => {
   }
 };
 
-exports.getBoardgame = async (_req: Request, res: Response) => {
+const getBoardgame = async (_req: Request, res: Response): Promise<void> => {
   try {
     const boardgames = await boardgame.getBoardgame();
-    return res.status(200).json(boardgames);
+    res.status(200).json(boardgames);
   } catch (error) {
     console.log("Error to find boardgames");
-    return res.status(500).json({ message: "Error to find boardgames" });
+    res.status(500).json({ message: "Error to find boardgames" });
   }
 };
-exports.getOneBoardgame = async (req: Request, res: Response) => {
+const getOneBoardgame = async (req: Request, res: Response) => {
   try {
     const boardgameId = req.params.id;
     const boardgameData = await boardgame.getOneBoardgame(boardgameId);
@@ -32,11 +32,11 @@ exports.getOneBoardgame = async (req: Request, res: Response) => {
   }
 };
 
-exports.updateBoardgame = async (req: Request, res: Response) => {
+const updateBoardgame = async (req: Request, res: Response) => {
   try {
     const boardgameId = req.params.id;
-    const { name, year, description } = req.body;
-    await boardgame.updateBoardgame(boardgameId, name, year, description);
+    const { title, year } = req.body;
+    await boardgame.updateBoardgame(boardgameId, title, year);
     res.status(200).json({ message: "Boardgame updated" });
   } catch (error) {
     console.log("Error to update boardgame", error);
@@ -44,7 +44,7 @@ exports.updateBoardgame = async (req: Request, res: Response) => {
   }
 };
 
-exports.deleteBoardgame = async (req: Request, res: Response) => {
+const deleteBoardgame = async (req: Request, res: Response) => {
   try {
     const boardgameId = req.params.id;
     await boardgame.deleteBoardgame(boardgameId);
@@ -53,4 +53,12 @@ exports.deleteBoardgame = async (req: Request, res: Response) => {
     console.log("Error to delete boardgame", error);
     res.status(500).json({ message: "Error to delete boardgame" });
   }
+};
+
+export default {
+  createBoardgame,
+  getBoardgame,
+  getOneBoardgame,
+  updateBoardgame,
+  deleteBoardgame,
 };
