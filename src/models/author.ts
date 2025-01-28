@@ -23,13 +23,18 @@ const getAuthors = async () => {
   return result?.records.map((record) => record.get("a").properties);
 };
 
-const getOneAuthor = async (id: String) => {
+const getOneAuthor = async (name: String) => {
   const query = `
-    MATCH (a:Author {id: "${id}"})
-    RETURN a
+    MATCH (a:Author {name: ${name}})
+    RETURN acl
   `;
-  const result = await runQuery(query);
-  return result?.records.map((record) => record.get("a").properties);
+  try {
+    const result = await runQuery(query);
+    return result?.records.map((record) => record.get("a").properties) || [];
+  } catch (error) {
+    console.error("Error fetching author from Neo4j:", error);
+    throw new Error("Error fetching author from Neo4j");
+  }
 };
 
 const updateAuthor = async (id: String) => {

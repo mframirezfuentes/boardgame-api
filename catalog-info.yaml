@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: example-repo
+  description: Repositorio con documentación de ejemplo.
+  annotations:
+    # Indica dónde buscar la documentación
+    backstage.io/techdocs-ref: url:https://github.com/KranioIO/Talentops-v2
+spec:
+  type: library
+  owner: mframirezfuentes@gmail.com
+  lifecycle: experimental

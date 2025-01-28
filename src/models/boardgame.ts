@@ -1,5 +1,6 @@
 import { runQuery } from "../config/neo4j";
 import { v4 as uuidv4 } from "uuid";
+import authorModel from "./author";
 
 const createUser = async (name: String, email: String) => {
   const query = `
@@ -44,18 +45,19 @@ const addGameToUser = async (userId: String, gameId: String) => {
 
 const createBoardgame = async (title: String, year: number, author: String) => {
   const query = `
-    CREATE (b:BoardGame {title: ${title}, year: ${year}, id: "${uuidv4()}"})
-    MERGE (a:Author {name: ${author}})
+    MATCH(a:Author {name: "${author}"})
+    CREATE (b:BoardGame {title: "${title}", year: ${year}, id: "${uuidv4()}"})
     CREATE (b)-[:CREATED_BY]->(a)
     RETURN b
   `;
   try {
-    const result = await runQuery(query);
-    if (result && result.records[0]) {
-      return result.records[0].get("b").properties;
-    } else {
-      throw new Error("No records found");
+    const findAuthor = await authorModel.getOneAuthor(author);
+    if(!findAuthor) {
+      return null;
     }
+    const result = await runQuery(query);
+
+    return result?.records[0].get("b").properties;
   } catch (error) {
     console.error("Error creating boardgame in Neo4j:", error);
     throw new Error("Error creating boardgame in Neo4j");

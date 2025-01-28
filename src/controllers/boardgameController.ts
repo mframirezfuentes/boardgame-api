@@ -1,9 +1,17 @@
 import { Request, Response } from "express";
 import boardgame from "../models/boardgame";
+import authorToBordGame from "../models/author";
 
 const createBoardgame = async (req: Request, res: Response) => {
   try {
     const { title, year, author } = req.body;
+    const findAuthor = await authorToBordGame.getOneAuthor(author);
+    console.log("findAutor", findAuthor);
+    if (!findAuthor || findAuthor.length === 0) {
+       res
+        .status(400)
+        .json({ message: "Author not found. Please create the author first." });
+    }
     const newBoardgame = await boardgame.createBoardgame(title, year, author);
     res.status(201).json(newBoardgame);
   } catch (error) {
