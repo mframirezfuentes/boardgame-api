@@ -5,7 +5,7 @@ metadata:
   description: Repositorio con documentación de ejemplo.
   annotations:
     # Indica dónde buscar la documentación
-    backstage.io/techdocs-ref: url:https://github.com/KranioIO/Talentops-v2
+    backstage.io/techdocs-ref: https://github.com/mframirezfuentes/boardgame-api
 spec:
   type: library
   owner: mframirezfuentes@gmail.com
