@@ -13,5 +13,5 @@ Antes de empezar, asegúrate de tener:
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/tu-organizacion/tu-repo.git
+   git clone https://github.com/mframirezfuentes/boardgame-api
    cd tu-repo
