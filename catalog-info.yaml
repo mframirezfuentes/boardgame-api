@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: example-repo
+  description: Este repositorio está sincronizado con Backstage.
+  annotations:
+    backstage.io/techdocs-ref: url:https://github.com/mframirezfuentes/boardgame-api
+    github.com/project-slug: mframirezfuentes/boardgame-api
+spec:
+  type: library
+  owner: mframirezfuentes@gmail.com
+  lifecycle: production
