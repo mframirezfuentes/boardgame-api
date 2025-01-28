@@ -12,6 +12,6 @@ Antes de empezar, asegúrate de tener:
 ## Instalación
 
 1. Clona el repositorio:
-   ```bash
+   bash
    git clone https://github.com/mframirezfuentes/boardgame-api
-   cd tu-repo
+   cd boardgame
