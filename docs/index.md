@@ -23,3 +23,4 @@ Este proyecto es una herramienta diseñada para resolver [problema que resuelve]
 - [Otros usuarios relevantes].
 
 Explora la documentación y ponte en marcha rápidamente.
+Se utiliza backstage para su documentación
