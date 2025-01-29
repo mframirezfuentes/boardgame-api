@@ -4,7 +4,7 @@ metadata:
   name: example-repo
   description: Este repositorio está sincronizado con Backstage.
   annotations:
-    backstage.io/techdocs-ref: url:https://github.com/mframirezfuentes/boardgame-api/docs/
+    backstage.io/techdocs-ref: url:https://github.com/mframirezfuentes/boardgame-api/tree/main/docs
     github.com/project-slug: mframirezfuentes/boardgame-api
 spec:
   type: library
