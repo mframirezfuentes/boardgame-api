@@ -2,9 +2,9 @@ import { runQuery } from "../config/neo4j";
 import { v4 as uuidv4 } from "uuid";
 import authorModel from "./author";
 
-const createUser = async (name: String, email: String) => {
+const createUser = async (userId: String,name: String, email: String) => {
   const query = `
-    CREATE (u:User {name: "${name}", email: "${email}"})
+    CREATE (u:User {userId:"${userId}",name: "${name}", email: "${email}"})
     RETURN u
   `;
 
@@ -110,6 +110,8 @@ const updateBoardgame = async (id: String, title: String, year: number) => {
     console.log("error to modify boardgame", error);
   }
 };
+
+//const relationUserToBoardgame=async()=>{}
 
 export default {
   createUser,

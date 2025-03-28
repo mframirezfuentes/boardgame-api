@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/users";
 import userModel from "../models/boardgame";
+import { v4 as uuidv4 } from "uuid";
 
 const getUsers = async (_req: Request, res: Response) => {
   try {
@@ -15,25 +16,31 @@ const getUsers = async (_req: Request, res: Response) => {
 export const createUser = async (
   req: Request,
   res: Response
-): Promise<void>  => {
+): Promise<void> => {
   try {
     const { name, email, password } = req.body;
+    const userId = uuidv4();
+    const newUser = new User({ userId, name, email, password });
+    await newUser.save();
 
     try {
-      const newUser = new User({ name, email, password });
-      await newUser.save();
-      await userModel.createUser(name, email);
-       res
+      await userModel.createUser(userId, name, email);
+
+      res
         .status(201)
         .json({ message: "Usuario creado con éxito", user: newUser });
     } catch (error) {
-       res
-        .status(500)
-        .json({ message: "Error al crear usuario en Neo4j" });
+      console.error("Error al crear usuario en Neo4j:", error);
+      await User.findByIdAndDelete(newUser._id);
+
+      res.status(500).json({
+        message:
+          "Error al crear usuario en Neo4j, usuario eliminado de MongoDB",
+      });
     }
   } catch (error) {
-    console.log("Can not to create user");
-     res.status(500).send("error to create user");
+    console.error("Error al crear usuario en MongoDB:", error);
+    res.status(500).send("Error al crear usuario");
   }
 };
 
