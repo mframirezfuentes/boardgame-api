@@ -3,7 +3,7 @@ import authenticateToken from "../middlewares/authMiddlerware";
 import location from "../controllers/locationController";
 const router = express.Router();
 
-router.post("/location", location.createLocation);
+router.post("/location", authenticateToken,location.createLocation);
 router.post("/location/user", authenticateToken, location.addLocationToUser);
 router.get("/location", authenticateToken, location.getLocations);
 router.get("/location/:id", authenticateToken, location.getOneLocation);
