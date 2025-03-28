@@ -4,12 +4,13 @@ import authorModel from "./author";
 
 const createUser = async (name: String, email: String) => {
   const query = `
-    CREATE (u:User {name: ${name}, email: ${email}})
+    CREATE (u:User {name: "${name}", email: "${email}"})
     RETURN u
   `;
+
   try {
     const result = await runQuery(query);
-    console.log("Neo4j result:", result);
+
     if (result && result.records[0]) {
       return result.records[0].get("u").properties;
     } else {
@@ -52,7 +53,7 @@ const createBoardgame = async (title: String, year: number, author: String) => {
   `;
   try {
     const findAuthor = await authorModel.getOneAuthor(author);
-    if(!findAuthor) {
+    if (!findAuthor) {
       return null;
     }
     const result = await runQuery(query);

@@ -27,7 +27,6 @@ export const createUser = async (
         .status(201)
         .json({ message: "Usuario creado con éxito", user: newUser });
     } catch (error) {
-      console.log("Error al crear usuario en Neo4j:", error);
        res
         .status(500)
         .json({ message: "Error al crear usuario en Neo4j" });
