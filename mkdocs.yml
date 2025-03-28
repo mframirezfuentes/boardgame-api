@@ -1,7 +1,0 @@
-site_name: Boardgame API Docs
-nav:
-  - Home: index.md
-  - Getting Started: getting-started.md
-docs_dir: docs
-plugins:
-  - techdocs-core
