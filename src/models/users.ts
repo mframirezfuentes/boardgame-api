@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 import bycript from "bcrypt";
+import { IUser } from "../utils/IRole";
+import { Role } from "../utils/role";
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema<IUser>({
   userId: {
     type: String,
     required: true,
@@ -25,7 +27,10 @@ const userSchema = new mongoose.Schema({
     maxlength: 100,
     required: true,
   },
-  isAdmin: Boolean,
+  role: {
+    type: String,
+    default: Role.USER,
+  },
 });
 
 userSchema.pre("save", async function (next) {
