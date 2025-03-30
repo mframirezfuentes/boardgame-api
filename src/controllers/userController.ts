@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/users";
-import userModel from "../models/boardgame";
-import { v4 as uuidv4 } from "uuid";
-import { IUser } from "../utils/IRole";
+
+
 
 const getUsers = async (_req: Request, res: Response) => {
   try {
@@ -14,36 +13,6 @@ const getUsers = async (_req: Request, res: Response) => {
   }
 };
 
-export const createUser = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const { name, email, password } = req.body;
-    const userId = uuidv4();
-    const newUser = new User<IUser>({ userId, name, email, password });
-    await newUser.save();
-
-    try {
-      await userModel.createUser(userId, name, email);
-
-      res
-        .status(201)
-        .json({ message: "Usuario creado con éxito", user: newUser });
-    } catch (error) {
-      console.error("Error al crear usuario en Neo4j:", error);
-      await User.findByIdAndDelete(newUser._id);
-
-      res.status(500).json({
-        message:
-          "Error al crear usuario en Neo4j, usuario eliminado de MongoDB",
-      });
-    }
-  } catch (error) {
-    console.error("Error al crear usuario en MongoDB:", error);
-    res.status(500).send("Error al crear usuario");
-  }
-};
 
 const deleteUser = async (req: Request, res: Response) => {
   try {
@@ -68,4 +37,4 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export default { getUsers, deleteUser, updateUser, createUser };
+export default { getUsers, deleteUser, updateUser };
