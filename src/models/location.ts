@@ -8,7 +8,6 @@ const createLocation = async (name:  String, address: String) => {
     `;
   try {
     const result = await runQuery(query);
-    console.log("Neo4j result:", result);
     return result.records[0].get("l").properties;
   } catch (error) {
     console.error("Error creating location in Neo4j:", error);
