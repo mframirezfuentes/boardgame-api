@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/users";
-
-
+import userModel from "../models/boardgame";
 
 const getUsers = async (_req: Request, res: Response) => {
   try {
@@ -13,12 +12,12 @@ const getUsers = async (_req: Request, res: Response) => {
   }
 };
 
-
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     await User.findByIdAndDelete(id);
-    res.status(200).json({ message: "Usuario eliminado con éxito" });
+    await userModel.deleteUser(id);
+    await res.status(200).json({ message: "Usuario eliminado con éxito" });
   } catch (error) {
     console.log("Error to delete user", error);
     res.status(500).json({ message: "Error to delete user" });
@@ -30,6 +29,7 @@ const updateUser = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { name, email, password } = req.body;
     await User.findByIdAndUpdate(id, { name, email, password });
+    await userModel.updateUser(id, name, email);
     res.status(200).json({ message: "Usuario actualizado con éxito" });
   } catch (error) {
     console.log("error to update user", error);

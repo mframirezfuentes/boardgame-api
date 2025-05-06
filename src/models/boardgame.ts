@@ -2,7 +2,7 @@ import { runQuery } from "../config/neo4j";
 import { v4 as uuidv4 } from "uuid";
 import authorModel from "./author";
 
-const createUser = async (userId: String,name: String, email: String) => {
+const createUser = async (userId: String, name: String, email: String) => {
   const query = `
     CREATE (u:User {userId:"${userId}",name: "${name}", email: "${email}"})
     RETURN u
@@ -65,6 +65,21 @@ const createBoardgame = async (title: String, year: number, author: String) => {
   }
 };
 
+const updateUser = async (id: String, name: String, email: String) => {
+  const query = `
+  MATCH (u:User {id: "${id}"})
+  SET u.name = "${name}", u.email = ${email}`;
+  await runQuery(query);
+};
+const deleteUser = async (id: String) => {
+  const query = `
+    MATCH (u:User {id: "${id}"})
+    DETACH DELETE u
+
+  `;
+  await runQuery(query);
+};
+
 const deleteBoardgame = async (id: String) => {
   const query = `
     MATCH (b:BoardGame {id: "${id}"})
@@ -116,6 +131,8 @@ const updateBoardgame = async (id: String, title: String, year: number) => {
 export default {
   createUser,
   getUsers,
+  updateUser,
+  deleteUser,
   addGameToUser,
   createBoardgame,
   deleteBoardgame,
